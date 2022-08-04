@@ -3,10 +3,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ProgrammersBlog.Services.AutoMapper.Profiles;
 using ProgrammersBlog.Services.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ProgrammersBlog.Mvc
@@ -17,8 +20,17 @@ namespace ProgrammersBlog.Mvc
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews().AddRazorRuntimeCompilation();
-            services.AddAutoMapper(typeof(Startup));
+            services.AddControllersWithViews().AddRazorRuntimeCompilation().AddJsonOptions(opt =>
+            {
+                opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+                //iç içe olan objelerin referanslarýyla beraber gönderilebilmesi için :::::::
+                opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+                /* data ile gelen veriyi parse ederek bir deðiþken içerisine atýyoruz.
+                 const ajaxModel=jQuery.parseJSON(data); deðiþken içerisindeki sonuç durumunu
+                kontrol ediyoruz ve iþlem durumuna göre (Success-Error) blok çalýþtýrýyoruz.{Enumda ayarladýðýmýz deðerler}
+                */
+            });
+            services.AddAutoMapper(typeof(CategoryProfile),typeof(ArticleProfile));
             services.LoadMyServices();
         }
 

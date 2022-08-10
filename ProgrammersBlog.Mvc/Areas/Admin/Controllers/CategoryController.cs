@@ -5,6 +5,7 @@ using ProgrammersBlog.Services.Abstract;
 using ProgrammersBlog.Shared.Utilities.Extensions;
 using ProgrammersBlog.Shared.Utilities.Results.ComplexTypes;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
@@ -19,7 +20,7 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var result = await _categoryService.GetAll();
+            var result = await _categoryService.GetAllByNonDeleted();
             return View(result.Data);
 
         }
@@ -50,6 +51,37 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
                 CategoryAddPartial = await this.RenderViewToStringAsync("_CategoryAddPartial", categoryAddDto)//string parse edip verme
             });
             return Json(categoryAddAjaxErorModel);
+        }
+
+        public async Task<JsonResult> GetAllCategories()
+        {
+            var result = await _categoryService.GetAllByNonDeleted();
+            var categories = JsonSerializer.Serialize(result.Data, new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve
+            });
+            return Json(categories);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> Delete(int categoryId)
+        {
+            var result = await _categoryService.Delete(categoryId, "Ahmet Çiftçi");
+            var deletedCategory = JsonSerializer.Serialize(result.Data);
+            return Json(deletedCategory);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Update(int categoryId)//parçalı view döneceğimiz için asenkron olmasına gerek yok
+        {
+            var result = await _categoryService.GetCategoryUpdateDto(categoryId);
+            if (result.ResultStatus==ResultStatus.Success)
+            {
+                return PartialView("_CategoryUpdatePartial", result.Data);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
     }
 }

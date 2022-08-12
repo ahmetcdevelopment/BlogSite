@@ -83,5 +83,27 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
                 return NotFound();
             }
         }
+        [HttpPost]
+        public async Task<IActionResult> Update(CategoryUpdateDto categoryUpdateDto)//parçalı view döneceğimiz için asenkron olmasına gerek yok
+        {
+            if (ModelState.IsValid)//model içinde bilgiler doğru olarak gelmiş mi
+            {
+                var result = await _categoryService.Update(categoryUpdateDto, "Ahmet Çiftçi");
+                if (result.ResultStatus == ResultStatus.Success)
+                {
+                    var categoryUpdateAjaxModel = JsonSerializer.Serialize(new CategoryUpdateAjaxViewModel
+                    {
+                        CategoryDto = result.Data,
+                        CategoryUpdatePartial = await this.RenderViewToStringAsync("_CategoryUpdatePartial", categoryUpdateDto)//string parse edip verme
+                    });
+                    return Json(categoryUpdateAjaxModel);//javascriptin anlayabilmesi için
+                }
+            }
+            var categoryUpdateAjaxErorModel = JsonSerializer.Serialize(new CategoryUpdateAjaxViewModel
+            {
+                CategoryUpdatePartial = await this.RenderViewToStringAsync("_CategoryUpdatePartial", categoryUpdateDto)//string parse edip verme
+            });
+            return Json(categoryUpdateAjaxErorModel);
+        }
     }
 }

@@ -29,47 +29,47 @@ namespace ProgrammersBlog.Data.Concrete.EntitiyFramework.Mappings
             builder.Property(c => c.Note).HasMaxLength(500);
             builder.ToTable("Comments");
 
-            builder.HasData(
-                new Comment
-                {
-                    Id = 1,
-                    ArticleId = 1,
-                    Text = "Güzel bir yazı olmuş.",
-                    IsActive = true,
-                    IsDeleted = false,
-                    CreatedByName = "InitialCreate",
-                    CreatedDate = DateTime.Now,
-                    ModifiedByName = "InitialCreate",
-                    ModifiedDate = DateTime.Now,
-                    Note = "C# makale yorumu",
-                },
-                new Comment
-                {
-                    Id = 2,
-                    ArticleId = 2,
-                    Text = "Güzel bir yazı olmuş.",
-                    IsActive = true,
-                    IsDeleted = false,
-                    CreatedByName = "InitialCreate",
-                    CreatedDate = DateTime.Now,
-                    ModifiedByName = "InitialCreate",
-                    ModifiedDate = DateTime.Now,
-                    Note = "C++ makale yorumu",
-                },
-                new Comment
-                {
-                    Id = 3,
-                    ArticleId = 3,
-                    Text = "Güzel bir yazı olmuş.",
-                    IsActive = true,
-                    IsDeleted = false,
-                    CreatedByName = "InitialCreate",
-                    CreatedDate = DateTime.Now,
-                    ModifiedByName = "InitialCreate",
-                    ModifiedDate = DateTime.Now,
-                    Note = "JavaScript makale yorumu",
-                }
-                );
+            //builder.HasData(
+            //    new Comment
+            //    {
+            //        Id = 1,
+            //        ArticleId = 1,
+            //        Text = "Güzel bir yazı olmuş.",
+            //        IsActive = true,
+            //        IsDeleted = false,
+            //        CreatedByName = "InitialCreate",
+            //        CreatedDate = DateTime.Now,
+            //        ModifiedByName = "InitialCreate",
+            //        ModifiedDate = DateTime.Now,
+            //        Note = "C# makale yorumu",
+            //    },
+            //    new Comment
+            //    {
+            //        Id = 2,
+            //        ArticleId = 2,
+            //        Text = "Güzel bir yazı olmuş.",
+            //        IsActive = true,
+            //        IsDeleted = false,
+            //        CreatedByName = "InitialCreate",
+            //        CreatedDate = DateTime.Now,
+            //        ModifiedByName = "InitialCreate",
+            //        ModifiedDate = DateTime.Now,
+            //        Note = "C++ makale yorumu",
+            //    },
+            //    new Comment
+            //    {
+            //        Id = 3,
+            //        ArticleId = 3,
+            //        Text = "Güzel bir yazı olmuş.",
+            //        IsActive = true,
+            //        IsDeleted = false,
+            //        CreatedByName = "InitialCreate",
+            //        CreatedDate = DateTime.Now,
+            //        ModifiedByName = "InitialCreate",
+            //        ModifiedDate = DateTime.Now,
+            //        Note = "JavaScript makale yorumu",
+            //    }
+            //    );
         }
     }
 }

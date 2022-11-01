@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using ProgrammersBlog.Entities.Dtos;
 using ProgrammersBlog.Mvc.Areas.Admin.Models;
 using ProgrammersBlog.Services.Abstract;
@@ -7,6 +9,8 @@ using ProgrammersBlog.Shared.Utilities.Results.ComplexTypes;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using ProgrammersBlog.Data.Concrete.EntitiyFramework.Contexts;
+using ProgrammersBlog.Entities.Concrete;
 
 namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
 {
@@ -14,6 +18,8 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;
+        //private ProgrammersBlogContext _context;
+
         public CategoryController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
@@ -35,12 +41,12 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
             if (ModelState.IsValid)//model içinde bilgiler doğru olarak gelmiş mi
             {
                 var result = await _categoryService.Add(categoryAddDto, "Ahmet Çiftçi");
-                if(result.ResultStatus == ResultStatus.Success)
+                if (result.ResultStatus == ResultStatus.Success)
                 {
                     var categoryAddAjaxModel = JsonSerializer.Serialize(new CategoryAddAjaxViewModel
                     {
-                        CategoryDto=result.Data,
-                        CategoryAddPartial= await this.RenderViewToStringAsync("_CategoryAddPartial",categoryAddDto)//string parse edip verme
+                        CategoryDto = result.Data,
+                        CategoryAddPartial = await this.RenderViewToStringAsync("_CategoryAddPartial", categoryAddDto)//string parse edip verme
                     });
                     return Json(categoryAddAjaxModel);//javascriptin anlayabilmesi için
                 }
@@ -52,19 +58,37 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
             });
             return Json(categoryAddAjaxErorModel);
         }
-
         public async Task<JsonResult> GetAllCategories()
         {
-            var result = await _categoryService.GetAllByNonDeleted();
-            var categories = JsonSerializer.Serialize(result.Data, new JsonSerializerOptions
-            {
-                ReferenceHandler = ReferenceHandler.Preserve
-            });
-            return Json(categories);
+            //using (ProgrammersBlogContext _context = new ProgrammersBlogContext())
+            //{
+            var categories = await _categoryService.GetAllByNonDeleted();
+                //var result = _context.Categories.ToList<Category>();
+            return Json(new { rows = categories.Data.Categories, page = 1 }, new Newtonsoft.Json.JsonSerializerSettings());
+            //}
+            //var result = await _categoryService.GetAllByNonDeleted();
+            ////var categories = JsonSerializer.Serialize(result.Data.Categories);
+            //var categories = JsonSerializer.Serialize(result.Data, new JsonSerializerOptions
+            //{
+            //    ReferenceHandler = ReferenceHandler.Preserve
+            //});
+            //return Json(new { page=1, rows=categories});
+
         }
+        //[HttpGet]
+        //public async Task<JsonResult> Delete(int Id)//create a [HttpPost] for delete method
+        //{
+        //    var result = await _categoryService.Get(Id);
+        //    var deletedCategory = JsonSerializer.Serialize(result.Data,new JsonSerializerOptions
+        //    {
+        //        ReferenceHandler = ReferenceHandler.Preserve
+        //    });
+        //    return Json(deletedCategory);
+
+        //}
 
         [HttpPost]
-        public async Task<JsonResult> Delete(int categoryId)
+        public async Task<JsonResult> Delete(int categoryId)//başka bir parametre daha girmem gerekiyor overload işlemi olduğu için methodların aynı olmaması gerekiyor.
         {
             var result = await _categoryService.Delete(categoryId, "Ahmet Çiftçi");
             var deletedCategory = JsonSerializer.Serialize(result.Data);
@@ -99,11 +123,11 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
                     return Json(categoryUpdateAjaxModel);//javascriptin anlayabilmesi için
                 }
             }
-            var categoryUpdateAjaxErorModel = JsonSerializer.Serialize(new CategoryUpdateAjaxViewModel
+            var categoryUpdateAjaxErrorModel = JsonSerializer.Serialize(new CategoryUpdateAjaxViewModel
             {
                 CategoryUpdatePartial = await this.RenderViewToStringAsync("_CategoryUpdatePartial", categoryUpdateDto)//string parse edip verme
             });
-            return Json(categoryUpdateAjaxErorModel);
+            return Json(categoryUpdateAjaxErrorModel);
         }
     }
 }

@@ -20,6 +20,11 @@ namespace ProgrammersBlog.Shared.Data.Concrete.EntityFramework
         }
         public async Task<TEntity> AddAsync(TEntity entity)
         {
+            //using (_context)
+            //{
+            //    await _context.Set<TEntity>().AddAsync(entity);
+            //    return entity;
+            //}
             await _context.Set<TEntity>().AddAsync(entity);
             return entity;
         }
@@ -54,6 +59,11 @@ namespace ProgrammersBlog.Shared.Data.Concrete.EntityFramework
                 }
             }
             return await query.ToListAsync();
+        }
+
+        public IQueryable<TEntity> GetAsQueryable()
+        {
+            return _context.Set<TEntity>().AsQueryable();
         }
 
         public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includeProperties)

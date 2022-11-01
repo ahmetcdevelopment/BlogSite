@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProgrammersBlog.Services.Concrete
 {
@@ -67,6 +68,8 @@ namespace ProgrammersBlog.Services.Concrete
 
         public async Task<IDataResult<CategoryDto>> Get(int categoryId)
         {
+            var query = _unitOfWork.Categories.GetAsQueryable();
+            query.Where(c => c.Id == categoryId).Include(c => c.Articles).ThenInclude(a => a.Comments);
             var category = await _unitOfWork.Categories.GetAsync(c=>c.Id==categoryId,c=>c.Articles);
             if (category != null)
                 return new DataResult<CategoryDto>(ResultStatus.Success, new CategoryDto
@@ -104,12 +107,15 @@ namespace ProgrammersBlog.Services.Concrete
 
         public async Task<IDataResult<CategoryListDto>> GetAllByNonDeleted()
         {
-            var categories = await _unitOfWork.Categories.GetAllAsync(c=>!c.IsDeleted,c=>c.Articles);
-            if (categories.Count > -1)
+            var query = _unitOfWork.Categories.GetAsQueryable();
+            query=query.Where(c => !c.IsDeleted);
+            var categoryList=await query.ToListAsync();
+            //var categories =  await _unitOfWork.Categories.GetAllAsync(c=>!c.IsDeleted);
+            if (categoryList.Count > 0)
             {
                 return new DataResult<CategoryListDto>(ResultStatus.Success, new CategoryListDto
                 {
-                    Categories = categories,
+                    Categories = categoryList,
                     ResultStatus = ResultStatus.Success
 
                 });

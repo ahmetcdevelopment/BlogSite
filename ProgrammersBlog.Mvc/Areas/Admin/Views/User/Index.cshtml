@@ -1,9 +1,8 @@
-﻿@using ProgrammersBlog.Entities.Concrete
-@using ProgrammersBlog.Shared.Utilities.Results.ComplexTypes
-@model ProgrammersBlog.Entities.Dtos.CategoryListDto
+﻿@using ProgrammersBlog.Shared.Utilities.Results.ComplexTypes
+@model ProgrammersBlog.Entities.Dtos.UserListDto
 @{
     Layout = "_Layout";
-    ViewBag.Title = "Kategoriler Index";
+    ViewBag.Title = "Kullanıcılar Index";
 }
 
 
@@ -18,7 +17,7 @@
 
 <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
     <div class="input-group">
-        <input class="form-control" type="text" placeholder="Kategori Ara" aria-label="Search" aria-describedby="basic-addon2" />
+        <input class="form-control" type="text" placeholder="Kullanıcı Ara" aria-label="Search" aria-describedby="basic-addon2" />
     </div>
 </form>
 <br/>
@@ -81,19 +80,17 @@
                         width: 150
                     },
                     {
-                        label: 'Description',
+                        label: 'E-Posta Adresi',
                         name: 'Description',
                         width: 150
                     },
                     {
-                        label: 'CreatedDate',
+                        label: 'Telefon Numarası',
                         name: 'CreatedDate',
                         width: 150,
-                        formatter: "date",
-                        formatoptions: { "srcformat": "Y-m-d", "newformat": "d/m/Y" } //tarih,resim gibi alanlarda format problemleri olduğu için formatter ve formatoptions kullnacağım
                     },
                     {
-                        label: 'CreatedByName',
+                        label: 'Resim',
                         name: 'CreatedByName',
                         width: 150
                     },
@@ -125,7 +122,7 @@
 
 
             $(function() {
-                const url = '@Url.Action("Add", "Category")';
+                const url = '@Url.Action("Add", "User")';
                 const placeHolderDiv = $('#modalPlaceHolder');
                 $('#btnAdd').click(function() {
                     $.get(url).done(function(data) {
@@ -137,14 +134,14 @@
                     '#btnSave',
                     function(event) {
                         event.preventDefault();
-                        const form = $('#form-category-add');
+                        const form = $('#form-user-add');
                         const actionUrl = form.attr('action');
                         const dataToSend = form.serialize();
                         $.post(actionUrl, dataToSend).done(function(data) {
                             console.log(data);
-                            const categoryAddAjaxModel = jQuery.parseJSON(data);
-                            console.log(categoryAddAjaxModel);
-                            const newFormBody = $('.modal-body', categoryAddAjaxModel.CategoryAddPartial);
+                            const userAddAjaxModel = jQuery.parseJSON(data);
+                            console.log(userAddAjaxModel);
+                            const newFormBody = $('.modal-body', userAddAjaxModel.UserAddPartial);
                             placeHolderDiv.find('.modal-body').replaceWith(newFormBody);
                             placeHolderDiv.find('.modal').modal('hide');
                             //jQuery("#list").trigger("reloadGrid");

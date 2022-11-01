@@ -100,6 +100,9 @@ namespace ProgrammersBlog.Services.Concrete
 
         public async Task<IDataResult<ArticleListDto>> GetAllByNonDeleted()
         {
+            //var query = _unitOfWork.Articles.GetAllAsync();
+            //query.Where(a => !a.IsDeleted && a.IsActive);
+            //var articleList = query.ToList();
             var articles= await _unitOfWork.Articles.GetAllAsync(a=>!a.IsDeleted,a=>a.User, a=>a.Category);
             if (articles.Count < -1)
             {

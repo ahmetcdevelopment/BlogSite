@@ -26,7 +26,7 @@ namespace ProgrammersBlog.Mvc
         {
             services.AddControllersWithViews().AddRazorRuntimeCompilation().AddJsonOptions(opt =>
             {
-                opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+                opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 opt.JsonSerializerOptions.ReferenceHandler=ReferenceHandler.Preserve;
             });
             //services.AddControllers().AddNewtonsoftJson(options =>

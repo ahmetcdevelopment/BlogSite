@@ -11,10 +11,12 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using ProgrammersBlog.Data.Concrete.EntitiyFramework.Contexts;
 using ProgrammersBlog.Entities.Concrete;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;

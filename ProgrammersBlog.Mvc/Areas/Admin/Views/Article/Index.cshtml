@@ -1,182 +1,33 @@
-﻿@using ProgrammersBlog.Shared.Utilities.Results.ComplexTypes
-@model ProgrammersBlog.Entities.Dtos.ArticleListDto
-@{
-    Layout = "_Layout";
-    ViewBag.Title = "Makaleler Index";
-}
-
-
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js"
+            referrerpolicy="origin"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@@tinymce/tinymce-jquery@2/dist/tinymce-jquery.min.js"></script>
 </head>
-<div id="modalPlaceHolder" aria-hidden="true"></div>
-
-<form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
-    <div class="input-group">
-        <input class="form-control" type="text" placeholder="Kategori Ara" aria-label="Search" aria-describedby="basic-addon2" />
+<body>
+    <div>
+        <textarea id="tiny">&lt;p&gt;Welcome to the TinyMCE jQuery example!&lt;/p&gt;</textarea>
     </div>
-</form>
-<br/>
-<table id="list"></table>
-<div id="pager"></div>
-
-<button id="btnAdd" type="button" class="btn btn-info btn-sm" ><span class="far fa-plus-square"></span> Ekle</button>
-@*<input type="button" name="button" id="btnAdd" value="Ekle">*@
-@section Scripts
-{
-    <script type="text/javascript">
-        function editLink(cellValue, options, rowdata, action) {
-            var a = "";
-            //bi alt satırda href içerisinde link tanımladık ve row.id'yi çağırmış olduk.<a ile bir link açtık ve içine span verdik.
-            a += "<a href='/Admin/Category/Delete/" + rowdata.Id + "' title='" + " ><span class='nav-link-icon'><span class='fas fa-trash-alt text-danger'></span></span></a>";
-            a += '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-            return a;
-        }
-
-        $(document).ready(function() {
-            var modal = document.getElementById('modalPlaceHolder');
-            var btn = document.getElementById('btnAdd');
-            //$(function () {
-            //    const url = '/Admin/Category/Add/';//const değiştirilemez veri tipidir var değiştirilebilir veri tipidir.
-            //    const placeHolderDiv = $('#modalPlaceHolder');
-            //    $('#btnAdd').click(function () {
-            //        $.get(url).done(function (data) {
-            //            placeHolderDiv.html(data);
-            //            placeHolderDiv.find(".modal").modal('show');
-            //        });
-            //    });
-            var editFormatter = function(cellVal, options, rowObject) {
-                return "<button class=\"btn btn-dark btn-sm btn-update\"><span class=\"glyphicon glyphicon-edit\"></span></button>";
-            };
-            var deleteFormatter = function(cellVal, options, rowObject) {
-                return "<button class=\"btn btn-dark btn-sm btn-delete\"><span class=\"far fa-trash-alt\"></span></button>";
-            };
-
-            function deleteLink(cellValue, options, rowdata, action) {
-                var a = "";
-                a += "<a href='/Company/Activity/Delete/" + rowdata.Id + "' title='" + "onclick='DeleteConfirm(this,event);return false;' ><span class='nav-link-icon'><span class='fas fa-trash-alt text-danger'></span></span></a>";
-                a += '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-                return a;
-            }
-            function imageFormat( cellvalue, options, rowObject ){
-                return '<img src="'+cellvalue+'" />';
-            }
-
-            $("#list").jqGrid({
-                url: '/Admin/Article/GetAll/',
-                datatype: "json",
-                mtype: "POST", //GET POST FARKINA BAK
-                colNames: ["Id", "CategoryName", "Title", "Thumbnail", "Date", "ViewCount", "CreatedDate", "CreatedByName","Edit", "Delete"],
-                colModel: [
-                    {
-                        label: 'Id',
-                        name: 'Id',
-                        key: true,
-                        width: 75
-                    }, {
-                        label: 'CategoryName',
-                        name: 'CategoryName',
-                        width: 150
-                    },
-                    {
-                        label: 'Title',
-                        name: 'Title',
-                        width: 150
-                    },
-                    {
-                        label: 'Thumbnail',
-                        name: 'Thumbnail',
-                        width: 150,
-                        formatter:imageFormat()
-                    },
-                    {
-                        label: 'Date',
-                        name: 'Date',
-                        width: 150
-                    },
-                    {
-                        label: 'ViewCount',
-                        name: 'ViewCount',
-                        width: 150
-                    },
-                    {
-                        label: 'CreatedDate',
-                        name: 'CreatedDate',
-                        width: 150,
-                        formatter: "date",
-                        formatoptions: { "srcformat": "Y-m-d", "newformat": "d/m/Y" } //tarih,resim gibi alanlarda format problemleri olduğu için formatter ve formatoptions kullnacağım
-                    },
-                    {
-                        label: 'CreatedByName',
-                        name: 'CreatedByName',
-                        width: 150
-                    },
-                    {
-                        label: 'Edit',
-                        name: 'Edit',
-                        key: true,
-                        width: 20,
-                        formatter: editFormatter
-                    },
-                    {
-                        label: 'Delete',
-                        name: 'Delete',
-                        key: true,
-                        width: 20,
-                        formatter: deleteFormatter //add, delete ve edit için fonksiyonlar oluşturacağım,bu fonksiyonları formatter olarak vereceğim
-                    }
+        <script>@* Makale eklerken kullanıcıların Blogger.com'daki gibi word toollarını kullanabilmesi için. /tiny mce editor/ *@
+            $('textarea#tiny').tinymce({
+                height: 500,
+                menubar: false,
+                plugins: [
+                    'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                    'anchor', 'searchreplace', 'visualblocks', 'fullscreen',
+                    'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
                 ],
-
-                //formatter:function(event e, ) add
-                viewrecords: true,
-                height: 250,
-                pager: "#pager",
-                autowidth: true,
-                multiselect: false
-                //pager-you have to choose here what icons should appear at the bottom  
-                //like edit,create,delete icons  
+                toolbar: 'undo redo | blocks | bold italic backcolor | ' +
+                    'alignleft aligncenter alignright alignjustify | ' +
+                    'bullist numlist outdent indent | removeformat | help'
             });
-
-
-            //-------------------------------------------------------------------------------------------------------------
-            //$(function() {
-            //   
-            //    const placeHolderDiv = $('#modalPlaceHolder');
-
-            //    $(document).on('click',
-            //        '.btn-update',
-            //        function(event) {
-            //            event.preventDefault();
-            //            //id alamıyom :(
-            //            $.get(url).done(function() {
-            //                placeHolderDiv.html(data);
-            //                placeHolderDiv.find('.modal').modal('show');
-            //            });
-            //        });
-            //});
-        });
-
-        //    /* Ajax GET / _CategoryAddPartial'ı Modal Form olarak almak burada bitiyor. */
-
-        //    /* Ajax POST / FormData'yı CategoryAddDto olarak yayınlamak burada başlıyor. */
-
-        //    placeHolderDiv.on('click',
-        //        '#btnSave',
-        //        function (event) {
-        //            event.preventDefault();
-        //            const form = $('#form-category-add');
-        //            const actionUrl = form.attr('action');
-        //            const dataToSend = form.serialize();
-        //            $.post(actionUrl, dataToSend).done(function (data) {
-        //                console.log(data);
-        //                const categoryAddAjaxModel = jQuery.parseJSON(data);
-        //                console.log(categoryAddAjaxModel);
-        //                const newFormBody = $('.modal-body', categoryAddAjaxModel.CategoryAddPartial);
-        //                placeHolderDiv.find('.modal-body').replaceWith(newFormBody);
-        //                const isValid = newFormBody.find('[name="IsValid"]').val() === 'True';
-        //                if (isValid) {
-        //                    placeHolderDiv.find('.modal').modal('hide');
-        //Ekleme Silme Güncelleme butonlarının içini doldur - Arama işlemini yap 
-        //Ajax işlemlerine iyice bak araştır. javascript ile iş kuralları da yazman gerekiyor.
     </script>
-    }
+
+</body>
+</html>

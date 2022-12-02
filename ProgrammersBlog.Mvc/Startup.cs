@@ -15,13 +15,17 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using ProgrammersBlog.Mvc.AutoMapper.Profiles;
+using Microsoft.Extensions.Configuration;
 
 namespace ProgrammersBlog.Mvc
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        public Startup(IConfiguration configuration)
+        {
+            Configuration=configuration;
+        }
+        public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews().AddRazorRuntimeCompilation().AddJsonOptions(opt =>
@@ -39,14 +43,14 @@ namespace ProgrammersBlog.Mvc
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddSession();
             services.AddAutoMapper(typeof(CategoryProfile),typeof(ArticleProfile),typeof(UserProfile));
-            services.LoadMyServices();
+            services.LoadMyServices(connectionString:Configuration.GetConnectionString("LocalDB"));
             services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = new PathString("/Admin/User/Login");
                 options.LogoutPath = new PathString("/Admin/User/Logout");
                 options.Cookie = new CookieBuilder
                 {
-                    Name="Programmers Blog",
+                    Name="ProgrammersBlog",
                     HttpOnly = true,//kullanýcýnýn js ile bizim cookie bilgilerimizi görmesini engelliyoruz
                     SameSite = SameSiteMode.Strict, //cookie bilgileri sadece kendi sitemizden geldiðinde iþlensin
                     SecurePolicy = CookieSecurePolicy.SameAsRequest //always olmalý 

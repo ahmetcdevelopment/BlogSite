@@ -13,7 +13,7 @@ namespace ProgrammersBlog.Shared.Data.Concrete.EntityFramework
     public class EfEntityRepositoryBase<TEntity> : IEntityRepository<TEntity>
         where TEntity : class, IEntity, new()
     {
-        private readonly DbContext _context;
+        protected readonly DbContext _context;//EfEntityRepository'i inherit eden Repository sınıflarımız erişebilsin diye protected tanımlıyoruz.
         public EfEntityRepositoryBase(DbContext context)
         {
             _context = context;
@@ -34,9 +34,9 @@ namespace ProgrammersBlog.Shared.Data.Concrete.EntityFramework
             return await _context.Set<TEntity>().AnyAsync(predicate);
         }
 
-        public async Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate)
+        public async Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate=null)
         {
-            return await _context.Set<TEntity>().CountAsync(predicate);
+            return await (predicate==null ? _context.Set<TEntity>().CountAsync() : _context.Set<TEntity>().CountAsync(predicate));
         }
 
         public async Task DeleteAsync(TEntity entity)
@@ -69,10 +69,8 @@ namespace ProgrammersBlog.Shared.Data.Concrete.EntityFramework
         public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includeProperties)
         {
             IQueryable<TEntity> query = _context.Set<TEntity>();
-            if (predicate != null)
-            {
-                query = query.Where(predicate);
-            }
+            query = query.Where(predicate);
+            
             if (includeProperties.Any())
             {
                 foreach (var includeProperty in includeProperties)

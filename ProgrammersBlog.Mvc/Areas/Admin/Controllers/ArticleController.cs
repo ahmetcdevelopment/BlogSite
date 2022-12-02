@@ -17,7 +17,7 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var result = await _articleService.GetAllByNonDeleted();
+            var result = await _articleService.GetAllByNonDeletedAsync();
             //if (result.ResultStatus==ResultStatus.Success)
             //{
             //    return View(result.Data);
@@ -33,7 +33,7 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
 
         public async Task<JsonResult> GetAll()
         {
-            var articles = await _articleService.GetAllByNonDeleted();
+            var articles = await _articleService.GetAllByNonDeletedAsync();
             //var result = _context.Categories.ToList<Category>();
             return Json(new { rows = articles.Data.Articles, page = 1 }, new Newtonsoft.Json.JsonSerializerSettings());
         }

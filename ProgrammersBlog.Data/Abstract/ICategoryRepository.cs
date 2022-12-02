@@ -10,5 +10,6 @@ namespace ProgrammersBlog.Data.Abstract
 {
     public interface ICategoryRepository:IEntityRepository<Category>
     {
+        Task<Category> GetByIdAsync(int id);
     }
 }

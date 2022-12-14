@@ -17,13 +17,13 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var result = await _articleService.GetAllByNonDeletedAsync();
-            //if (result.ResultStatus==ResultStatus.Success)
-            //{
-            //    return View(result.Data);
-            //}
-            return View(result.Data);
-            //return NotFound();
+            var result = await _articleService.GetAllByNonDeleted();
+            if (result.ResultStatus == ResultStatus.Success)
+            {
+                return View(result.Data);
+            }
+            //return View(result.Data);
+            return NotFound();
         }
         [HttpGet]
         public IActionResult Add()
@@ -31,11 +31,11 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
             return View();
         }
 
-        public async Task<JsonResult> GetAll()
-        {
-            var articles = await _articleService.GetAllByNonDeletedAsync();
-            //var result = _context.Categories.ToList<Category>();
-            return Json(new { rows = articles.Data.Articles, page = 1 }, new Newtonsoft.Json.JsonSerializerSettings());
-        }
+        //public async Task<JsonResult> GetAll()
+        //{
+        //    var articles = await _articleService.GetAllByNonDeletedAsync();
+        //    //var result = _context.Categories.ToList<Category>();
+        //    return Json(new { rows = articles.Data.Articles, page = 1 }, new Newtonsoft.Json.JsonSerializerSettings());
+        //}
     }
 }

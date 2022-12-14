@@ -16,6 +16,8 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using ProgrammersBlog.Mvc.AutoMapper.Profiles;
 using Microsoft.Extensions.Configuration;
+using ProgrammersBlog.Mvc.Helpers.Abstract;
+using ProgrammersBlog.Mvc.Helpers.Concrete;
 
 namespace ProgrammersBlog.Mvc
 {
@@ -44,6 +46,7 @@ namespace ProgrammersBlog.Mvc
             services.AddSession();
             services.AddAutoMapper(typeof(CategoryProfile),typeof(ArticleProfile),typeof(UserProfile));
             services.LoadMyServices(connectionString:Configuration.GetConnectionString("LocalDB"));
+            services.AddScoped<IImageHelper, ImageHelper>();
             services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = new PathString("/Admin/User/Login");

@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace ProgrammersBlog.Services.Abstract
 {
-    public interface ICommentService
+    public interface ICommentService//ArticleController'da çağırdığım zaman hata veriyor.
+        //_commentService.CountByIsDeleted() hata veriyor.
     {
         Task<IDataResult<int>> Count();
         Task<IDataResult<int>> CountByIsDeleted();

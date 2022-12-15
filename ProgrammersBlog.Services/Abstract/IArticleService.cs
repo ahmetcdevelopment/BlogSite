@@ -22,5 +22,6 @@ namespace ProgrammersBlog.Services.Abstract
         Task<IResult> HardDelete(int articleId);
         Task<IDataResult<int>> Count();
         Task<IDataResult<int>> CountByIsDeleted();
+        Task<IDataResult<ArticleListDto>> GetAllByNonDeletedDeneme();
     }
 }

@@ -56,7 +56,7 @@ namespace ProgrammersBlog.Services.Concrete
 
         public async Task<IDataResult<ArticleListDto>> GetAllByNonDeleted()
         {
-            var articles = await _unitOfWork.Articles.GetAllAsync(a => !a.IsDeleted, ar => ar.User, ar => ar.Category);
+            var articles = await _unitOfWork.Articles.GetAllAsync(a => !a.IsDeleted);
             if (articles.Count > -1)
             {
                 return new DataResult<ArticleListDto>(ResultStatus.Success, new ArticleListDto
@@ -178,6 +178,11 @@ namespace ProgrammersBlog.Services.Concrete
             {
                 return new DataResult<int>(ResultStatus.Error, $"Beklenmeyen bir hata ile karşılaşıldı.", -1);
             }
+        }
+
+        public Task<IDataResult<ArticleListDto>> GetAllByNonDeletedDeneme()
+        {
+            throw new NotImplementedException();
         }
     }
 }

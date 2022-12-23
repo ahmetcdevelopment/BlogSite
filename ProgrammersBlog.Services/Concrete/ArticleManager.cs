@@ -180,9 +180,11 @@ namespace ProgrammersBlog.Services.Concrete
             }
         }
 
-        public Task<IDataResult<ArticleListDto>> GetAllByNonDeletedDeneme()
+        public IList<ArticleDetailsDto> GetAllByNonDeletedDeneme()
         {
-            throw new NotImplementedException();
+            var articles = _unitOfWork.Articles.GetAllQuaryable();
+            return articles;
+           
         }
     }
 }

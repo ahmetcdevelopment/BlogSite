@@ -1,4 +1,5 @@
 ﻿using ProgrammersBlog.Entities.Concrete;
+using ProgrammersBlog.Entities.Dtos;
 using ProgrammersBlog.Shared.Data.Abstract;
 using System;
 using System.Collections.Generic;
@@ -10,5 +11,6 @@ namespace ProgrammersBlog.Data.Abstract
 {
     public interface IArticleRepository:IEntityRepository<Article>
     {
+        IList<ArticleDetailsDto> GetAllQuaryable();
     }
 }

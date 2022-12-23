@@ -61,7 +61,7 @@
                 url: '/Admin/Article/GetAll/',
                 datatype: "json",
                 mtype: "GET", //GET POST FARKINA BAK
-                colNames: ["Id","Title","Content", "Edit", "Delete"],
+                colNames: ["Id", "Title", "CategoryName", "Content", "Edit", "Delete"],
                 colModel: [
                     {
                         label: 'Id',
@@ -71,6 +71,10 @@
                     }, {
                         label: 'Title',
                         name: 'Title',
+                        width: 150
+                    }, {
+                        label: 'CategoryName',
+                        name: 'CategoryName',
                         width: 150
                     }, {
                         label: 'Content',

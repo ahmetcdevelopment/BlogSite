@@ -125,7 +125,7 @@ namespace ProgrammersBlog.Services.Concrete
             return new Result(ResultStatus.Success, Messages.Article.Update(article.Title));
         }
 
-        public async Task<IResult> Delete(int articleId, string modifiedByName)
+        public async Task<IDataResult<ArticleDto>> Delete(int articleId, string modifiedByName)
         {
             var result = await _unitOfWork.Articles.AnyAsync(a => a.Id == articleId);
             if (result)
@@ -136,9 +136,19 @@ namespace ProgrammersBlog.Services.Concrete
                 article.ModifiedDate = DateTime.Now;
                 await _unitOfWork.Articles.UpdateAsync(article);
                 await _unitOfWork.SaveAsync();
-                return new Result(ResultStatus.Success, Messages.Article.Delete(article.Title));
+                return new DataResult<ArticleDto>(ResultStatus.Success, Messages.Article.Delete(article.Title),new ArticleDto
+                {
+                    Article= article,
+                    Message=Messages.Article.Delete(article.Title),
+                    ResultStatus=ResultStatus.Success
+                });
             }
-            return new Result(ResultStatus.Error, Messages.Article.NotFound(isPlural: false));
+            return new DataResult<ArticleDto>(ResultStatus.Error, Messages.Article.NotFound(isPlural: false),new ArticleDto
+            {
+                Article=null,
+                Message=Messages.Article.NotFound(isPlural:false),
+                ResultStatus=ResultStatus.Error
+            });
         }
 
         public async Task<IResult> HardDelete(int articleId)

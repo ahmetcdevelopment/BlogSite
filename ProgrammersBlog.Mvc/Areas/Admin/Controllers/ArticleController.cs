@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ProgrammersBlog.Services.Abstract;
@@ -42,6 +43,26 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
             //return Json(new { rows = result, page = 1 }, new Newtonsoft.Json.JsonSerializerSettings());
             var articles =  _articleService.GetAllByNonDeletedDeneme();
             return Json(new { rows = articles, page = 1 }, new Newtonsoft.Json.JsonSerializerSettings());
+        }
+        [HttpPost]
+        public async Task<JsonResult> Delete(int articleId)
+        {
+            var result = await _articleService.Delete(articleId, "Ahmet Çiftçi");
+            var deletedCategory = JsonSerializer.Serialize(result.Data);
+            return Json(deletedCategory);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Get(int articleId)
+        {
+            var result = await _articleService.Get(articleId);
+            if (result.ResultStatus==ResultStatus.Success)
+            {
+                return PartialView("_ArticleDetailsPartial",result.Data);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
     }
 }

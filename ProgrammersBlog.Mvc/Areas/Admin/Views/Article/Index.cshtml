@@ -43,8 +43,8 @@
             //            placeHolderDiv.find(".modal").modal('show');
             //        });
             //    });
-            var editFormatter = function (cellVal, options, rowObject) {
-                return "<button class=\"btn btn-dark btn-sm btn-update\"><span class=\"glyphicon glyphicon-edit\"></span></button>";
+            var detailsFormatter = function (cellVal, options, rowObject) {
+                return "<button class=\"btn btn-dark btn-sm btn-details\"><span class=\"glyphicon glyphicon-edit\"></span></button>";
             };
             var deleteFormatter = function (cellVal, options, rowObject) {
                 return "<button class=\"btn btn-dark btn-sm btn-delete\"><span class=\"far fa-trash-alt\"></span></button>";
@@ -61,7 +61,7 @@
                 url: '/Admin/Article/GetAll/',
                 datatype: "json",
                 mtype: "GET", //GET POST FARKINA BAK
-                colNames: ["Id", "Title", "CategoryName", "Content", "Edit", "Delete"],
+                colNames: ["Id", "Title", "CategoryName", "Content", "Details", "Delete"],
                 colModel: [
                     {
                         label: 'Id',
@@ -82,11 +82,11 @@
                         width: 150
                     },
                     {
-                        label: 'Edit',
-                        name: 'Edit',
+                        label: 'Details',
+                        name: 'Details',
                         key: true,
                         width: 20,
-                        formatter: editFormatter
+                        formatter: detailsFormatter
                     },
                     {
                         label: 'Delete',
@@ -138,63 +138,65 @@
             //        });
             //});
 
-            //$(document).on('click',
-            //    '.btn-delete',
-            //    function (event) {
-            //        event.preventDefault();
-            //        var id = $('#list').jqGrid('getGridParam', 'selrow');
-            //        var cellValue = $('#list').jqGrid('getCell', id, 'Id');
-            //        console.log(cellValue);
-            //        //const id = $(this).attr('Id'); //calismiyor
-            //        Swal.fire({
-            //            title: 'Silmek istediğinize emin misiniz?',
-            //            text: 'Kategori silinecektir.',
-            //            icon: 'warning',
-            //            showCancelButton: true,
-            //            confirmButtonColor: '#3085d6',
-            //            cancelButtonColor: '#d33',
-            //            confirmButtonText: 'Evet, silmek istiyorum.',
-            //            cancelButtonText: 'Hayır, silmek istemiyorum.'
-            //        }).then((result) => {
-            //            if (result.isConfirmed) {
-            //                $.ajax({
-            //                    type: 'POST',
-            //                    datatype: 'json',
-            //                    data: { categoryId: cellValue },
-            //                    url: '/Admin/Category/Delete/',
-            //                    success: function (data) {
-            //                        const categoryDto = jQuery.parseJSON(data);
-            //                        if (categoryDto.ResultStatus === 0) {
-            //                            Swal.fire(
-            //                                'Silindi!',
-            //                                'kategori başarıyla silinmiştir.',
-            //                                'success');
-            //                            $('#list').trigger('reloadGrid');
-            //                        }
-            //                    }
-            //                });
-            //                console.log(id);
+            $(document).on('click',
+                '.btn-delete',
+                function (event) {
+                    event.preventDefault();
+                    var id = $('#list').jqGrid('getGridParam', 'selrow');
+                    var cellValue = $('#list').jqGrid('getCell', id, 'Id');
+                    console.log(cellValue);
+                    //const id = $(this).attr('Id'); //calismiyor
+                    Swal.fire({
+                        title: 'Silmek istediğinize emin misiniz?',
+                        text: 'Makale silinecektir.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Evet, silmek istiyorum.',
+                        cancelButtonText: 'Hayır, silmek istemiyorum.'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: 'POST',
+                                datatype: 'json',
+                                data: { articleId: cellValue },
+                                url: '/Admin/Article/Delete/',
+                                success: function (data) {
+                                    const articleDto = jQuery.parseJSON(data);
+                                    console.log(data);
+                                    if (articleDto.ResultStatus === 0) {
+                                        
+                                        Swal.fire(
+                                            'Silindi!',
+                                            'makale başarıyla silinmiştir.',
+                                            'success');
+                                        $('#list').trigger('reloadGrid');
+                                    }
+                                }
+                            });
+                            console.log(id);
 
-            //            }
-            //        });
-            //    });
-            //$(function () {
-            //    const url = '/Admin/Category/Update/';
-            //    const placeHolderDiv = $('#modalPlaceHolder');
-            //    $(document).on('click',
-            //        '.btn-update',
-            //        function (event) {
-            //            event.preventDefault();
-            //            var id = $('#list').jqGrid('getGridParam', 'selrow');
-            //            var cellValue = $('#list').jqGrid('getCell', id, 'Id');
-            //            console.log(cellValue);
-            //            $.get(url, { categoryId: cellValue }).done(function (data) {
-            //                placeHolderDiv.html(data);
-            //                placeHolderDiv.find('.modal').modal('show');
-            //            }).fail(function () {
-            //                toastr.error("Bir Hata Oluştu.");
-            //            });
-            //        });
+                        }
+                    });
+                });
+            $(function () {
+                const url = '/Admin/Article/Get/';
+                const placeHolderDiv = $('#modalPlaceHolder');
+                $(document).on('click',
+                    '.btn-details',
+                    function (event) {
+                        event.preventDefault();
+                        var id = $('#list').jqGrid('getGridParam', 'selrow');
+                        var cellValue = $('#list').jqGrid('getCell', id, 'Id');
+                        console.log(cellValue);
+                        $.get(url, { articleId: cellValue }).done(function (data) {
+                            placeHolderDiv.html(data);
+                            placeHolderDiv.find('.modal').modal('show');
+                        }).fail(function () {
+                            toastr.error("Bir Hata Oluştu.");
+                        });
+                    });});
             //    placeHolderDiv.on('click',
             //        '#btnUpdate',
             //        function (event) {

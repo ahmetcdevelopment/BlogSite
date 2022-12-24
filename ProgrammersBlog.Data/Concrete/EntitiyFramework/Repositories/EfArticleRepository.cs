@@ -28,6 +28,7 @@ namespace ProgrammersBlog.Data.Concrete.EntitiyFramework.Repositories
             {
                 var query = from a in context.Articles
                             join c in context.Categories on a.CategoryId equals c.Id
+                            where !a.IsDeleted
                             select new ArticleDetailsDto
                             {
                                 Id = a.Id,

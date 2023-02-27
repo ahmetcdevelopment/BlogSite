@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProgrammersBlog.Entities.Dtos;
 using ProgrammersBlog.Mvc.Areas.Admin.Models;
@@ -7,11 +6,7 @@ using ProgrammersBlog.Services.Abstract;
 using ProgrammersBlog.Shared.Utilities.Extensions;
 using ProgrammersBlog.Shared.Utilities.Results.ComplexTypes;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using ProgrammersBlog.Data.Concrete.EntitiyFramework.Contexts;
-using ProgrammersBlog.Entities.Concrete;
-using Microsoft.AspNetCore.Authorization;
 
 namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
 {

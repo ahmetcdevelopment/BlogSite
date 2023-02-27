@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using ProgrammersBlog.Services.Abstract;
 using ProgrammersBlog.Shared.Utilities.Results.ComplexTypes;
 using ProgrammersBlog.Shared.Utilities.Results.Concrete;
@@ -36,13 +38,17 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
             return View();
         }
 
-        public JsonResult GetAll()
+        public JsonResult GetAll(List<int> data=null)
         {
+
+
             //var articles = await _articleService.GetAllByNonDeleted();
             //var result = articles.Data.Articles.ToList();
             //return Json(new { rows = result, page = 1 }, new Newtonsoft.Json.JsonSerializerSettings());
-            var articles =  _articleService.GetAllByNonDeletedDeneme();
+            var articles = _articleService.GetAllByNonDeletedDeneme();
             return Json(new { rows = articles, page = 1 }, new Newtonsoft.Json.JsonSerializerSettings());
+
+
         }
         [HttpPost]
         public async Task<JsonResult> Delete(int articleId)
